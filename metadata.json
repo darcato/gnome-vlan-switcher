@@ -1,0 +1,8 @@
+{
+    "uuid": "vlan-switcher@marcato.dev",
+    "name": "VLAN Switcher",
+    "description": "This let's you activate and deactivate VLAN connections from the system panel",
+    "version": 1,
+    "shell-version": [ "3.36.1" ],
+    "url": ""
+}
