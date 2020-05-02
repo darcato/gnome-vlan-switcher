@@ -43,15 +43,15 @@ const VlanManager = new Lang.Class({
         
         let devices = this._client.get_all_devices() || [];        
         devices.filter(d => d.get_device_type() == NM.DeviceType.VLAN)
-        .forEach(d => {
-            let active_conn = d.get_active_connection();
-            if (active_conn && active_conn.connection) {
-                active_connections.set(active_conn.connection.get_uuid(), active_conn);
-            } 
+            .forEach(d => {
+                let active_conn = d.get_active_connection();
+                if (active_conn && active_conn.connection) {
+                    active_connections.set(active_conn.connection.get_uuid(), active_conn);
+                }
         });
         
         let connections = this._client.get_connections() || [];
-        let vlans = connections.filter(c => c.is_type('vlan'));
+        let vlans = connections.filter(c => c.is_type(NM.SETTING_VLAN_SETTING_NAME));
         vlans.forEach(Lang.bind(this, function(vlan) {
             this.menu.addMenuItem(new PopupVlanItem(this._client, vlan, active_connections.get(vlan.get_uuid())));
         }));
