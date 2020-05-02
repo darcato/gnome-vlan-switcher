@@ -2,20 +2,15 @@
 'use strict';
 
 // This is a handy import we'll use to grab our extension's object
-const ExtensionUtils = imports.misc.extensionUtils;
-const { Gio, NM } = imports.gi;
-const NMDeviceWired = imports.ui.status.network.NMDeviceWired
-const Me = ExtensionUtils.getCurrentExtension();
-var PopupExtensionItem = Me.imports.popupExtensionItem.PopupExtensionItem;
-log(`Defining ${Me.metadata.name} version ${Me.metadata.version}`);
-
-const St = imports.gi.St;
+const { Gio, NM, Shell } = imports.gi;
 const Main = imports.ui.main;
 const Lang = imports.lang;
-const Shell = imports.gi.Shell;
 const PopupMenu = imports.ui.popupMenu;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const PopupVlanItem = Me.imports.popupVlanItem.PopupVlanItem;
 
-Gio._promisify(NM.Client, 'new_async', 'new_finish');
+log(`Defining ${Me.metadata.name} version ${Me.metadata.version}`);
 
 const VlanManager = new Lang.Class({
     Name: 'VlanManager',
@@ -44,27 +39,22 @@ const VlanManager = new Lang.Class({
 
     _refresh: function() {
         this.menu.removeAll();
-
-
-        let devices = this._client.get_devices() || [];
-        let vlans = devices.filter(d => d instanceof NM.DeviceEthernet);
-        for (let i = 0; i < vlans.length; ++i) {
-            let wrapper = new NMDeviceWired(this._client, devices[i]);
-            devices[i]._delegate = wrapper;
-            this.menu.addMenuItem(wrapper.item);
-        }
-
-        /* let uuids = Main.extensionManager.getUuids();
-        uuids.sort(function(a, b) { 
-            a = Main.extensionManager.lookup(a).metadata.name.toLowerCase();
-            b = Main.extensionManager.lookup(b).metadata.name.toLowerCase();
-
-            return a < b ? -1 : (a > b ? 1 : 0);
+        let active_connections = new Map();
+        
+        let devices = this._client.get_all_devices() || [];        
+        devices.filter(d => d.get_device_type() == NM.DeviceType.VLAN)
+        .forEach(d => {
+            let active_conn = d.get_active_connection();
+            if (active_conn && active_conn.connection) {
+                active_connections.set(active_conn.connection.get_uuid(), active_conn);
+            } 
         });
-
-        uuids.forEach(Lang.bind(this, function(uuid) {
-            this.menu.addMenuItem(new PopupExtensionItem(uuid));
-        })); */
+        
+        let connections = this._client.get_connections() || [];
+        let vlans = connections.filter(c => c.is_type('vlan'));
+        vlans.forEach(Lang.bind(this, function(vlan) {
+            this.menu.addMenuItem(new PopupVlanItem(this._client, vlan, active_connections.get(vlan.get_uuid())));
+        }));
 
         return true;
     },
