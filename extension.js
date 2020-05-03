@@ -6,9 +6,14 @@ const { Gio, NM, Shell } = imports.gi;
 const Main = imports.ui.main;
 const Lang = imports.lang;
 const PopupMenu = imports.ui.popupMenu;
+
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const PopupVlanItem = Me.imports.popupVlanItem.PopupVlanItem;
+
+const Gettext = imports.gettext
+Gettext.bindtextdomain('vlan-switcher', Me.dir.get_child('locale').get_path());
+const _ = Gettext.gettext;
 
 log(`Defining ${Me.metadata.name} version ${Me.metadata.version}`);
 
@@ -22,13 +27,9 @@ const VlanManager = new Lang.Class({
 
     _createContainer: function() {
         this.container = new PopupMenu.PopupSubMenuMenuItem("VLAN", true);
-        this.container.icon.style_class = 'system-extensions-submenu-icon';
-        this.container.icon.icon_name = 'goa-panel-symbolic';
+        this.container.icon.icon_name = 'network-wired-symbolic';
         this.menu = this.container.menu
-
         Main.panel.statusArea.aggregateMenu.menu.addMenuItem(this.container, 9);
-
-        this.menu = this.container.menu
         
         this.container.connect('button-press-event', Lang.bind(this, function() {
             this._refresh();
@@ -52,6 +53,12 @@ const VlanManager = new Lang.Class({
         
         let connections = this._client.get_connections() || [];
         let vlans = connections.filter(c => c.is_type(NM.SETTING_VLAN_SETTING_NAME));
+        
+        if (vlans.length < 1) {
+            this.menu.addMenuItem(new PopupMenu.PopupMenuItem(_("No VLAN found")));
+            return true;
+        }
+        
         vlans.forEach(Lang.bind(this, function(vlan) {
             this.menu.addMenuItem(new PopupVlanItem(this._client, vlan, active_connections.get(vlan.get_uuid())));
         }));
