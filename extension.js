@@ -7,7 +7,6 @@ const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const PopupVlanItem = Me.imports.popupVlanItem.PopupVlanItem;
 
 const Gettext = imports.gettext
 const _ = Gettext.gettext;
@@ -29,8 +28,8 @@ const VlanManager = new Lang.Class({
         Main.panel.statusArea.aggregateMenu.menu.addMenuItem(this.container, 9);
 
         // Register a callback when the VLAN section is pressed to open it
-        this.container.connect('button-press-event', Lang.bind(this, function () {
-            this._refresh();
+        this.menu.connect('open-state-changed', Lang.bind(this, function (menu, isOpen) {
+            if (isOpen) this._refresh();
         }));
 
         this._refresh();
