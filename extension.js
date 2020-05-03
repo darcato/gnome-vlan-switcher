@@ -39,17 +39,12 @@ const VlanManager = new Lang.Class({
     // Create the VLAN items and populate the menu
     _refresh: function () {
         this.menu.removeAll();
-        let active_connections = new Map();
 
-        // Get VLAN devices and save any active connection
-        let devices = this._client.get_all_devices() || [];
-        devices.filter(d => d.get_device_type() == NM.DeviceType.VLAN)
-            .forEach(d => {
-                let active_conn = d.get_active_connection();
-                if (active_conn && active_conn.connection) {
-                    active_connections.set(active_conn.connection.get_uuid(), active_conn);
-                }
-            });
+        // Store all ActiveConnections objects for each vlan
+        let active_vlans = new Map()
+        let active_connections = this._client.get_active_connections() || [];
+        active_connections.filter(ac => ac && ac.connection && ac.connection.is_type(NM.SETTING_VLAN_SETTING_NAME))
+            .forEach(ac => active_vlans.set(ac.connection.get_uuid(), ac));
 
         // Get all VLAN connections
         let connections = this._client.get_connections() || [];
@@ -63,7 +58,7 @@ const VlanManager = new Lang.Class({
 
         // Else, add one item for each VLAN
         vlans.forEach(Lang.bind(this, function (vlan) {
-            this._add_item(vlan, active_connections.get(vlan.get_uuid()));
+            this._add_item(vlan, active_vlans.get(vlan.get_uuid()));
         }));
 
         return true;
@@ -83,7 +78,7 @@ const VlanManager = new Lang.Class({
     },
 
     // Return a label corresponding to the activeConnection status
-    _get_status(active_vlan) {
+    _get_status: function (active_vlan) {
         if (!active_vlan)
             return null;
 
