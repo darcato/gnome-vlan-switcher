@@ -1,8 +1,10 @@
-# Gnome VLAN Switcher
+# GNOME VLAN Switcher
 
-### A Gnome extension to activate and deactivate VLAN connections from the system panel.
+### A GNOME extension to activate and deactivate VLAN connections from the system panel.
 
-![VLAN Switcher](vlan-switcher.jpg)
+<p align="center">
+    <img src="./vlan-switcher.jpg" alt="VLAN Switcher">
+</p>
 
 ## Installation
 
