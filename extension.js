@@ -48,7 +48,8 @@ const VlanManager = new Lang.Class({
 
         // Get all VLAN connections
         let connections = this._client.get_connections() || [];
-        let vlans = connections.filter(c => c.is_type(NM.SETTING_VLAN_SETTING_NAME));
+        let vlans = connections.filter(c => c.is_type(NM.SETTING_VLAN_SETTING_NAME))
+            .sort((a, b) => a.get_id() > b.get_id() ? 1 : -1);
 
         // If no VLAN, populate with a message
         if (vlans.length < 1) {
