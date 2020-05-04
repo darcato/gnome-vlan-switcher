@@ -17,14 +17,14 @@ const VlanManager = new Lang.Class({
 
     _init: function () {
         this._client = NM.Client.new(null);
-        this._createContainer()
+        this._createContainer();
     },
 
     // Create the VLAN Section on the system panel
     _createContainer: function () {
         this.container = new PopupMenu.PopupSubMenuMenuItem("VLAN", true);
         this.container.icon.icon_name = 'network-wired-symbolic';
-        this.menu = this.container.menu
+        this.menu = this.container.menu;
         Main.panel.statusArea.aggregateMenu.menu.addMenuItem(this.container, 9);
 
         // Register a callback when the VLAN section is pressed to open it
@@ -41,7 +41,7 @@ const VlanManager = new Lang.Class({
         this.menu.removeAll();
 
         // Store all ActiveConnections objects for each vlan
-        let active_vlans = new Map()
+        let active_vlans = new Map();
         let active_connections = this._client.get_active_connections() || [];
         active_connections.filter(ac => ac && ac.connection && ac.connection.is_type(NM.SETTING_VLAN_SETTING_NAME))
             .forEach(ac => active_vlans.set(ac.connection.get_uuid(), ac));
@@ -71,7 +71,7 @@ const VlanManager = new Lang.Class({
         let isActive = active_vlan !== undefined && active_vlan.get_state() != NM.ActiveConnectionState.DEACTIVATED;
 
         let switch_item = new PopupMenu.PopupSwitchMenuItem(vlan.get_id(), isActive);
-        switch_item.setStatus(this._get_status(active_vlan))
+        switch_item.setStatus(this._get_status(active_vlan));
         this.menu.addMenuItem(switch_item);
 
         // Register callback on switch toggled
@@ -99,7 +99,7 @@ const VlanManager = new Lang.Class({
     // Activate or deactivate connection when switch toggled
     _toggle: function (vlan, active_vlan) {
         if (active_vlan !== undefined)
-            this._client.deactivate_connection_async(active_vlan, null, null)
+            this._client.deactivate_connection_async(active_vlan, null, null);
         else
             this._client.activate_connection_async(vlan, null, null, null, null);
     },
