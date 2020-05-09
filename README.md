@@ -9,7 +9,7 @@
 ## Installation
 
 ### From extensions.gnome.org
-...
+https://extensions.gnome.org/extension/3061/vlan-switcher/
 
 ### From source code
 
