@@ -9,14 +9,18 @@
 ## Installation
 
 ### From extensions.gnome.org
+This can be installed from the GNOME extensions webpage:
+
 https://extensions.gnome.org/extension/3061/vlan-switcher/
 
 ### From source code
 
 ```
-rm -r ~/.local/share/gnome-shell/extensions/vlan-switcher@darcato.github.io
-git clone https://github.com/darcato/gnome-vlan-switcher ~/.local/share/gnome-shell/extensions/vlan-switcher@darcato.github.io
+cd ~/.local/share/gnome-shell/extensions/
+rm -r vlan-switcher@darcato.github.io
+git clone https://github.com/darcato/gnome-vlan-switcher vlan-switcher@darcato.github.io
 ```
+Now restart gnome-shell by opening the command prompt with `Alt+F2` and the executing command `r`.
 
 ## Usage
 
