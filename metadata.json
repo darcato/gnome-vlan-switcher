@@ -2,15 +2,8 @@
     "uuid": "vlan-switcher@darcato.github.io",
     "name": "VLAN Switcher",
     "description": "Activate and deactivate VLAN connections from the system panel.",
-    "version": 3,
+    "version": 4,
     "shell-version": [ 
-        "3.28",
-        "3.30",
-        "3.32",
-        "3.34",
-        "3.36",
-        "3.38",
-        "40",
         "42"
     ],
     "url": "https://github.com/darcato/gnome-vlan-switcher"

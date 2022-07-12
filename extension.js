@@ -1,13 +1,13 @@
 'use strict';
 
-const { Gio, NM, Shell } = imports.gi;
+const { GObject, NM } = imports.gi;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const Gettext = imports.gettext.domain(Me.metadata.uuid);
 const _ = Gettext.gettext;
 
 // Responsible to show VLAN section and populate it with elements
@@ -30,9 +30,9 @@ var VlanManager = GObject.registerClass(
             Main.panel.statusArea.aggregateMenu.menu.addMenuItem(this.container, 9);
     
             // Register a callback when the VLAN section is pressed to open it
-            this.menu.connect('open-state-changed', Lang.bind(this, function (menu, isOpen) {
+            this.menu.connect('open-state-changed', (menu, isOpen) => {
                 if (isOpen) this._refresh();
-            }));
+            });
     
             this._refresh();
         }
@@ -60,9 +60,9 @@ var VlanManager = GObject.registerClass(
             }
 
             // Else, add one item for each VLAN
-            vlans.forEach(Lang.bind(this, function (vlan) {
+            vlans.forEach((vlan) => {
                 this._add_item(vlan, active_vlans.get(vlan.get_uuid()));
-            }));
+            });
 
             return true;
         }
@@ -118,7 +118,7 @@ let vlanIndicator;
 
 // When the extension is installed
 function init() {
-    ExtensionUtils.initTranslations();
+    ExtensionUtils.initTranslations(Me.metadata.uuid);
 }
 
 // When the user enables this extension
