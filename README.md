@@ -20,7 +20,7 @@ cd ~/.local/share/gnome-shell/extensions/
 rm -r vlan-switcher@darcato.github.io
 git clone https://github.com/darcato/gnome-vlan-switcher vlan-switcher@darcato.github.io
 ```
-Now restart gnome-shell by opening the command prompt with `Alt+F2` and the executing command `r`.
+Now log out and log back in to reload the extensions.
 
 ## Usage
 
