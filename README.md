@@ -9,17 +9,19 @@
 ## Installation
 
 ### From extensions.gnome.org
+
 This can be installed from the GNOME extensions webpage:
 
 https://extensions.gnome.org/extension/3061/vlan-switcher/
 
 ### From source code
 
-```
+```bash
 cd ~/.local/share/gnome-shell/extensions/
 rm -r vlan-switcher@darcato.github.io
 git clone https://github.com/darcato/gnome-vlan-switcher vlan-switcher@darcato.github.io
 ```
+
 Now log out and log back in to reload the extensions.
 
 ## Usage
@@ -27,4 +29,5 @@ Now log out and log back in to reload the extensions.
 This will let you activate or deactivate existing VLAN connections, managed by the network manager. You first need to create the VLANs with your preferred tool, such as `nm-connection-editor`. The status of each connections is refreshed only when you open the popup menu.
 
 ## License
+
 [GPLv3](http://www.gnu.org/licenses/gpl-3.0.en.html)
